@@ -1,0 +1,65 @@
+{
+  "name": "webhook-receptor",
+  "version": "1.0.0-rc.0",
+  "packageManager": "yarn@3.0.2",
+  "engines": {
+    "node": ">=16.16 <17",
+    "npm": "please-use-yarn",
+    "yarn": ">= 3"
+  },
+  "scripts": {
+    "clear-logs": "rimraf logs/**/*.log*",
+    "compile": "tsc",
+    "monit": "pm2 monit Smartblock-Webhook-Receptor",
+    "build:dev": "NODE_ENV=development BUILD_MODE=yes ts-node scripts/build.ts",
+    "build:prod": "NODE_ENV=production BUILD_MODE=yes ts-node scripts/build.ts",
+    "deploy:dev:ssl": "USE_SSL=yes yarn deploy:dev",
+    "deploy:prod:ssl": "USE_SSL=yes yarn deploy:prod",
+    "deploy:dev": "NODE_ENV=development ts-node scripts/deploy",
+    "deploy:prod": "NODE_ENV=production ts-node scripts/deploy",
+    "start:dev:ssl": "USE_SSL=yes yarn start:dev",
+    "start:prod:ssl": "USE_SSL=yes yarn start:prod",
+    "start:dev": "NODE_ENV=development ts-node-dev src/main.ts",
+    "start:prod": "NODE_ENV=production node build/main.js",
+    "start": "yarn start:prod"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^4.6.0",
+    "morgan": "^1.10.0",
+    "portfinder": "^1.0.28",
+    "prompts": "^2.4.1",
+    "pug": "^3.0.2",
+    "serve-favicon": "^2.5.0"
+  },
+  "devDependencies": {
+    "@types/concurrently": "^6.2.1",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/fs-extra": "^9.0.12",
+    "@types/morgan": "^1.9.3",
+    "@types/node": "^16.9.1",
+    "@types/prompts": "^2.4.0",
+    "@types/rimraf": "^3.0.2",
+    "@types/serve-favicon": "^2.5.3",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "concurrently": "^6.2.1",
+    "dotenv": "^10.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "fs-extra": "^10.0.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.2.1",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.4.2"
+  },
+  "optionalDependencies": {
+    "pm2": "^5.1.1"
+  }
+}

@@ -1,0 +1,31 @@
+doctype
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    title 
+      | #{error.title} - Smartblock Dev Webhook Receptor
+    include ./shared/styles
+  body
+    .bodyWrapper
+      include ./shared/nav-bar
+      .container.subWrapper
+        .row.h-100.align-content-center
+          .col
+            h1.fw-bold
+              | #{error.title}
+            h2.fw-bold
+              | #{error.message}
+            if error.helper
+              br
+              p.text-danger
+                | #{error.helper}
+            if error.stack
+              br
+              span.text-muted
+                | Stack:
+              br
+              code
+                | #{error.stack}
+            br
+      include ./shared/footer
+      include ./shared/scripts

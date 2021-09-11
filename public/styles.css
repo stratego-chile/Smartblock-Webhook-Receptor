@@ -1,0 +1,26 @@
+::selection {
+  color: #FFF;
+  background: #4B5AE2;
+}
+
+body {
+  font-family: 'Poppins', sans-serif !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+.bodyWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.subWrapper {
+  flex-grow: 1;
+}
+
+*:disabled, *.disabled, *[disabled] {
+  cursor: not-allowed !important;
+  pointer-events: all !important;
+}

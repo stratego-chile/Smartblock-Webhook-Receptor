@@ -1,0 +1,19 @@
+doctype
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    include ./shared/head
+    include ./shared/styles
+  body
+    .bodyWrapper
+      include ./shared/nav-bar
+      .container.subWrapper
+        .row.h-100.align-content-center
+          .col
+            h1.fw-bold
+              | Smartblock Webhook Receptor
+            br
+            p
+              | The CI/CD integration service
+      include ./shared/footer
+      include ./shared/scripts
