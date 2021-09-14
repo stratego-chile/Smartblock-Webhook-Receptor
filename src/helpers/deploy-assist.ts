@@ -1,6 +1,7 @@
 import portfinder from 'portfinder'
 import dotenv from 'dotenv'
 import path from 'path'
+import fs from 'fs-extra'
 import prompts from 'prompts'
 
 type AvailablePortDef = {
@@ -8,14 +9,20 @@ type AvailablePortDef = {
   alternative?: number
 }
 
-export let servicePort = parseInt(process.env.PORT ?? '4000')
+const resolveDotEnvConfig = () => {
+  const defaultDotEnvFile = '.env'
+  const contextualDotEnvFile = defaultDotEnvFile + '.' + process.env.NODE_ENV
+  return dotenv.config({
+    path: path.join(
+      path.resolve(process.cwd()),
+      fs.existsSync(path.resolve(process.cwd(), contextualDotEnvFile))
+        ? contextualDotEnvFile
+        : defaultDotEnvFile // If not found, the application will not be started
+    )
+  })
+}
 
-export const dotEnvConfig = dotenv.config({
-  path: path.join(
-    path.resolve(process.cwd()),
-    `.env.${process.env.NODE_ENV}`
-  )
-})
+export const dotEnvConfig = resolveDotEnvConfig()
 
 export const isPortAvailable = async (port: number): Promise<AvailablePortDef> => {
   const availablePort = await portfinder.getPortPromise({
@@ -23,12 +30,13 @@ export const isPortAvailable = async (port: number): Promise<AvailablePortDef> =
     port,
     stopPort: port + 500
   })
-
   return {
     isAvailable: availablePort === port,
     alternative: availablePort
   }
 }
+
+export let servicePort = parseInt(process.env.PORT ?? (4000).toString())
 
 export const isConfigurationAvailable = async (): Promise<boolean> => {
   let { isAvailable } = await isPortAvailable(servicePort)

@@ -1,0 +1,51 @@
+version: 2.1
+
+jobs:
+  compile:
+    docker:
+      - image: circleci/node:16
+    steps:
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: yarn install --immutable
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - .yarn/cache
+            - .yarn/unplugged
+      - deploy:
+          name: TypeScript transpilation
+          command: yarn build:prod
+  deploy:
+    docker:
+      - image: circleci/node:16
+    steps:
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: yarn install --immutable
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - .yarn/cache
+            - .yarn/unplugged
+      - deploy:
+          name: Deploy transpiled application in production mode
+          command: yarn deploy:prod
+
+workflows:
+  build:
+    jobs:
+      - compile
+      - deploy

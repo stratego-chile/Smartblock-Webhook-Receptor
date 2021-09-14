@@ -1,12 +1,12 @@
 // Response headers
 export const DEFAULT_HEADERS = [
   'Origin',
-  'X-Requested-With',
   'Content-Type',
   'Accept',
   'Authorization',
   'Lang',
-  'Environment'
+  'Environment',
+  'X-Requested-With'
 ]
 
 export const DEFAULT_METHODS = ['OPTIONS', 'GET', 'POST']

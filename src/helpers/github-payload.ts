@@ -6,10 +6,10 @@ export const GITHUB_HEADERS = [
 ]
 
 export type GitHubPayload = {
-  action: 'created' | 'edited' | 'deleted'
-  rule: Record<string, unknown>
-  changes: Record<string, unknown>
-  repository: Record<string, unknown>
-  organization: Record<string, unknown>
-  sender: Record<string, unknown>
-}
+  action: 'created' | 'edited' | 'deleted' | 'closed'
+  rule: Record<string, any>
+  changes: Record<string, any>
+  repository: Record<string, any>
+  organization: Record<string, any>
+  sender: Record<string, any>
+} & Record<string, any>

@@ -18,8 +18,14 @@ node_modules
 
 # Logs
 logs/**/*log*
+payloads
 
 # Dev env
 .vscode
 .idea
 .ssl
+scripts/sandbox.ts
+
+# Private config
+.env*
+!.env*.example

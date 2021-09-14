@@ -3,18 +3,15 @@ import express, { urlencoded } from 'express'
 import favicon from 'serve-favicon'
 import helmet from 'helmet'
 import path from 'path'
-import { servicePort } from './helpers/deploy-assist'
 import ErrorHandler from './helpers/error-handler'
 import ApplicationRouter from './api/router'
 import { GITHUB_HEADERS } from './helpers/github-payload'
 import { connectionHandler } from './helpers/default-handlers'
-import launchApplication from './helpers/bootstrapper'
-import { DEFAULT_HEADERS, DEFAULT_METHODS, DEFAULT_SOURCES as DEFAULT_SOURCES_STATIC } from './helpers/default-values'
+import { DEFAULT_HEADERS, DEFAULT_METHODS, DEFAULT_SOURCES } from './helpers/default-values'
+import LaunchApplication from './boostrap'
+import morgan from 'morgan'
 
 export const WebhookReceptor = express()
-
-// Upgrade defaults
-const DEFAULT_SOURCES = [...DEFAULT_SOURCES_STATIC, `localhost:${servicePort}`]
 
 // Server security policies
 WebhookReceptor.use(
@@ -59,13 +56,17 @@ WebhookReceptor.set('views', path.resolve(__dirname, 'api', 'templates'))
 // General response and logging configuration
 WebhookReceptor.use(connectionHandler)
 
+// Default logger
+WebhookReceptor.use(morgan('dev'))
+
 // Assets endpoints
 WebhookReceptor.use(
-  favicon(path.join(__dirname, process.env.BUILD_MODE === 'yes' ? '.' : '..', 'public', 'favicon.ico')))
-
+  favicon(path.join(__dirname, process.env.BUILD_MODE === 'yes' ? '.' : '..', 'public', 'favicon.ico'))
+)
 WebhookReceptor.use(
   (process.env.BASE_PATH ?? '') + '/static',
-  express.static(path.join(__dirname, process.env.BUILD_MODE === 'yes' ? '.' : '..', 'public')))
+  express.static(path.join(__dirname, process.env.BUILD_MODE === 'yes' ? '.' : '..', 'public'))
+)
 
 // REST Endpoints definitions
 WebhookReceptor.use(process.env.BASE_PATH ?? '/', ApplicationRouter)
@@ -74,12 +75,12 @@ WebhookReceptor.use(process.env.BASE_PATH ?? '/', ApplicationRouter)
 WebhookReceptor.use(ErrorHandler.generic)
 
 /**
- * Error 404. DO NOT MOVE.
+ * Error 404. DO NOT MOVE!
  * Any route specified after the following instruction will be ignored by the router.
- * To add more routes just add them to the endpoints, views or redirects sections listed before.
+ * To add more routes just add them to the ApplicationRouter or in the views/redirects sections declared before.
  */
 WebhookReceptor.use(ErrorHandler.resourceNotFound)
 
 if (process.env.RUN_MODE !== 'module') {
-  launchApplication(WebhookReceptor, servicePort)
+  LaunchApplication(WebhookReceptor)
 }

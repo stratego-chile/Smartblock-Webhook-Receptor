@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { APIResponse } from '../types'
-import { HTTPError } from './http-error'
+import { HTTPError } from '../lib/http-error'
 
 export type ErrorTemplateData = {
   error: {

@@ -1,6 +1,6 @@
 {
   "name": "webhook-receptor",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "packageManager": "yarn@3.0.2",
   "engines": {
     "node": ">=16.16 <17",
@@ -8,7 +8,7 @@
     "yarn": ">= 3"
   },
   "scripts": {
-    "clear-logs": "rimraf logs/**/*.log*",
+    "clear-logs": "rimraf logs/**/*.log* payloads/**/*.json",
     "compile": "tsc",
     "monit": "pm2 monit Smartblock-Webhook-Receptor",
     "build:dev": "NODE_ENV=development BUILD_MODE=yes ts-node scripts/build.ts",
@@ -24,6 +24,7 @@
     "start": "yarn start:prod"
   },
   "dependencies": {
+    "@octokit/webhooks": "^9.14.2",
     "buffer": "^6.0.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -32,7 +33,8 @@
     "portfinder": "^1.0.28",
     "prompts": "^2.4.1",
     "pug": "^3.0.2",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/concurrently": "^6.2.1",
