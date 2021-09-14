@@ -10,6 +10,9 @@
   "scripts": {
     "clear-logs": "rimraf logs/**/*.log* payloads/**/*.json",
     "compile": "tsc",
+    "lint:dry": "eslint src --ext .ts",
+    "lint:fix": "yarn lint:dry --fix",
+    "lint": "yarn lint:dry",
     "monit": "pm2 monit Smartblock-Webhook-Receptor",
     "build:dev": "NODE_ENV=development BUILD_MODE=yes ts-node scripts/build.ts",
     "build:prod": "NODE_ENV=production BUILD_MODE=yes ts-node scripts/build.ts",
