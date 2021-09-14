@@ -1,4 +1,7 @@
 import processManager from 'pm2'
+import dotenv from 'dotenv'
+import path from 'path'
+import fs from 'fs-extra'
 
 (async () => {
   const processName = 'Smartblock-Webhook-Receptor'
@@ -23,7 +26,13 @@ import processManager from 'pm2'
           resolve(false)
         }
         if (showList) {
-          appList.forEach(app => console.log(app.name ?? 'The application', 'is', app.pm2_env?.status))
+          appList
+            .filter(app => app.name === processName)
+            .forEach((app, index) => console.log(
+              app.name ?? 'The application',
+              `(instance ${index}) is`,
+              app.pm2_env?.status
+            ))
         }
         if (appList.find(app => app.name === processName) && deleteProc) {
           processManager.delete(processName, (deleteError) => {
@@ -41,9 +50,24 @@ import processManager from 'pm2'
   }
 
   const start = async () => {
+    const dotEnvConfig = (() => {
+      const defaultDotEnvFile = '.env'
+      const contextualDotEnvFile = defaultDotEnvFile + '.' + process.env.NODE_ENV
+      return dotenv.config({
+        path: path.join(
+          path.resolve(process.cwd()),
+          fs.existsSync(path.resolve(process.cwd(), contextualDotEnvFile))
+            ? contextualDotEnvFile
+            : defaultDotEnvFile // If not found, the application will not be started
+        )
+      })
+    })()
+    if (dotEnvConfig.error) {
+      throw dotEnvConfig.error
+    }
     return new Promise<boolean>(resolve => {
       processManager.start(
-        process.env.USE_SSL === 'yes' ? 'yarn start:prod' : 'yarn start:prod:ssl',
+        'yarn start:prod',
         {
           env: {
             NODE_ENV: process.env.NODE_ENV ?? 'development',
