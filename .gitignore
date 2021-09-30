@@ -18,6 +18,7 @@ node_modules
 
 # Logs
 logs/**/*log*
+*.log
 payloads
 
 # Dev env
